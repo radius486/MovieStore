@@ -1,5 +1,8 @@
 <template>
   <div class="topbar">
+    <span class="material-icons basket-icon">
+      shopping_cart
+    </span>
     <div class="basket">{{ count }}</div>
   </div>
 </template>
@@ -26,12 +29,16 @@ export default class Topbar extends Vue {
   }
 
   .basket {
-    min-width: 30px;
     height: 20px;
     border: 2px solid #595555;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 5px;
+    padding: 0 10px;
+    margin-left: 5px;
+  }
+
+  .basket-icon {
+      font-size: 30px;
   }
 </style>
