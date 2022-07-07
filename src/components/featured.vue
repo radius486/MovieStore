@@ -40,9 +40,15 @@ export default class Topbar extends Vue {
 
   async fetchFeatured(): Promise<void> {
     const url = `${BASE_PATH}/top_rated?api_key=${API_KEY}&language=en-US&page=1`;
-    const { data } = await axios.get(url);
-    // eslint-disable-next-line
-    this.featuredMovies = data.results.map((result: any) => mapKeys(result, (value: any, key: string) => camelCase(key)));
+
+    try {
+      const { data } = await axios.get(url);
+      // eslint-disable-next-line
+      this.featuredMovies = data.results.map((result: any) => mapKeys(result, (value: any, key: string) => camelCase(key)));
+    } catch (error) {
+      // eslint-disable-next-line
+      console.error(error);
+    }
   }
 
   created(): void {
