@@ -1,10 +1,21 @@
 <template>
   <div class="movie-card">
     <div class="movie-card__header">
-      <span class="movie-card__rating" :class="raitingClass">{{ movie.voteAverage }}</span>
-      <span class="movie-card__popularity">{{ movie.popularity }}</span>
+      <div>
+        <span class="movie-card__rating" :class="raitingClass">{{ movie.voteAverage }}</span>
+        <span class="movie-card__voute-count">
+          <span class="material-icons star"></span>
+          {{ movie.voteCount }}
+        </span>
+      </div>
+      <span class="movie-card__popularity">
+        <span class="material-icons thumb-up">
+          thumb_up
+        </span>
+        {{ movie.popularity }}
+      </span>
     </div>
-    <img class="movie-card__image" :src="imageUrl" alt="movie.originalTitle">
+    <img class="movie-card__image" :src="imageUrl" :alt="movie.originalTitle">
     <div class="movie-card__info">
       <span class="movie-card__date">{{ movie.releaseDate }}</span>
       <button class="movie-card__add-to-cart">
@@ -47,8 +58,6 @@ export default class MovieCard extends Vue {
   .movie-card {
     width: 200px;
     height: 320px;
-    border: 1px solid #595555;
-    box-sizing: border-box;
     position: relative;
     background-color: #bdd6d6;
 
@@ -81,6 +90,21 @@ export default class MovieCard extends Vue {
       }
     }
 
+    &__voute-count {
+      font-size: 12px;
+      color: #fff;
+      margin-left: 2px;
+      background: rgba(0, 0, 0, 0.4);
+      line-height: 1.5;
+      border-radius: 2px;
+      padding: 0 2px;
+
+      .star {
+        font-size: 10px;
+        line-height: 1;
+      }
+    }
+
     &__popularity {
       color: #fff;
       background-color: #595555;
@@ -93,6 +117,12 @@ export default class MovieCard extends Vue {
       align-items: center;
       justify-content: center;
       padding-top: 2px;
+
+      .thumb-up {
+        font-size: 10px;
+        line-height: 1;
+        margin-right: 2px;
+      }
     }
 
     &__image {

@@ -14,3 +14,8 @@ export interface Movie {
   voteAverage: number;
   voteCount: number;
 }
+
+export enum SortDir {
+  ASC = 'asc',
+  DESC = 'desc'
+}
