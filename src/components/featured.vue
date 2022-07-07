@@ -39,7 +39,7 @@ export default class Topbar extends Vue {
   }
 
   async fetchFeatured(): Promise<void> {
-    const url = `${BASE_PATH}/top_rated?api_key=${API_KEY}&language=en-US&page=1`;
+    const url = `${BASE_PATH}/top_rated?api_key=${API_KEY}&language=en-US&page=3`;
 
     try {
       const { data } = await axios.get(url);
