@@ -101,6 +101,8 @@ export default class Topbar extends Vue {
     background-color: #fff;
     border-bottom: 2px solid #595555;
     padding: 40px;
+    max-width: 1600px;
+    margin: 0 auto;
 
     &__header {
       display: flex;

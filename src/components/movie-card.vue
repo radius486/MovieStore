@@ -60,6 +60,7 @@ export default class MovieCard extends Vue {
     height: 320px;
     position: relative;
     background-color: #bdd6d6;
+    user-select: none;
 
     &__header {
       display: flex;
