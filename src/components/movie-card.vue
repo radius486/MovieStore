@@ -2,8 +2,17 @@
   <div class="movie-card">
     <div class="movie-card__header">
       <span class="movie-card__rating" :class="raitingClass">{{ movie.voteAverage }}</span>
+      <span class="movie-card__popularity">{{ movie.popularity }}</span>
     </div>
     <img class="movie-card__image" :src="imageUrl" alt="movie.originalTitle">
+    <div class="movie-card__info">
+      <span class="movie-card__date">{{ movie.releaseDate }}</span>
+      <button class="movie-card__add-to-cart">
+        <span class="material-icons">
+          add_shopping_cart
+        </span>
+      </button>
+    </div>
     <h3 class="movie-card__title">
       {{ movie.title }}
     </h3>
@@ -41,6 +50,7 @@ export default class MovieCard extends Vue {
     border: 1px solid #595555;
     box-sizing: border-box;
     position: relative;
+    background-color: #bdd6d6;
 
     &__header {
       display: flex;
@@ -71,6 +81,20 @@ export default class MovieCard extends Vue {
       }
     }
 
+    &__popularity {
+      color: #fff;
+      background-color: #595555;
+      border-radius: 5px;
+      padding: 0px 5px;
+      font-size: 14px;
+      line-height: 1;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 2px;
+    }
+
     &__image {
       width: 100%;
       height: 250px;
@@ -78,8 +102,26 @@ export default class MovieCard extends Vue {
       display: block;
     }
 
+    &__info {
+      margin-top: -25px;
+      height: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5px;
+    }
+
+    &__date {
+      color: #fff;
+      font-size: 12px;
+      background-color: #2c3e50;
+      border-radius: 2px;
+      padding: 0 5px;
+      line-height: 1.5;
+    }
+
     &__title {
-      color: #2c3e50;
+      color: #000;
       font-size: 16px;
       margin: 0;
       padding: 0 10px;
@@ -87,6 +129,30 @@ export default class MovieCard extends Vue {
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &__add-to-cart {
+      margin: 0;
+      padding: 0 2px;
+      box-shadow: none;
+      background: rgba(0, 0, 0, 0.4);
+      border: 0;
+      cursor: pointer;
+      border-radius: 2px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      span {
+        color: #fff;
+        font-size: 16px;
+      }
     }
   }
 </style>
