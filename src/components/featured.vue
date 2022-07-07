@@ -3,7 +3,7 @@
       <div class="featured__header">
         <h2 class="featured__title">
           <span class="material-icons stars"></span>
-          Featured Movies
+          {{ title }}
         </h2>
         <div class="featured__actions">
           <button
@@ -22,7 +22,6 @@
       </div>
       <div class="featured__container">
         <movie-card
-          class="featured-item"
           v-for="(movie, index) in sortedMovies"
           :movie="movie"
           :key="`featured-item-${index}`">
@@ -48,6 +47,8 @@ import { BASE_PATH, API_KEY } from '@/constants';
 export default class Topbar extends Vue {
   SortDir = setup(() => SortDir)
 
+  title = 'Featured Movies';
+
   featuredMovies: Movie[] = [];
 
   sortBy: string | null = null;
@@ -68,7 +69,7 @@ export default class Topbar extends Vue {
 
   snakeToCamel(str: string): string {
     // eslint-disable-next-line
-    console.log(this);
+    console.log(this.title);
     return str.toLowerCase()
       .replace(/([-_][a-z])/g, (group) => group
         .toUpperCase()
@@ -77,7 +78,7 @@ export default class Topbar extends Vue {
   }
 
   async fetchFeatured(): Promise<void> {
-    const url = `${BASE_PATH}/top_rated?api_key=${API_KEY}&language=en-US&page=3`;
+    const url = `${BASE_PATH}/top_rated?api_key=${API_KEY}&language=en-US&page=1`;
 
     try {
       const { data } = await axios.get(url);
