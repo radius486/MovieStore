@@ -1,13 +1,5 @@
 <template>
   <div class="details">
-    <div class="details__header">
-        <router-link class="details__back" to="/">
-          <span class="material-icons">
-            west
-          </span>
-          Homepage
-        </router-link>
-    </div>
     <h1 class="details__title">{{ title }}</h1>
     <img class="details__image" :src="imageUrl" :alt="movie.originalTitle">
     <p class="details__description">{{ movie.overview }}</p>
@@ -59,7 +51,7 @@ export default class Details extends Vue {
   }
 
   get imageUrl(): string {
-    return `${IMAGES_PATH}/${this.movie.posterPath}`;
+    return this.movie.posterPath ? `${IMAGES_PATH}/${this.movie.posterPath}` : '';
   }
 
   movie = {} as MovieDetaild;
@@ -96,23 +88,6 @@ export default class Details extends Vue {
 <style scoped lang="scss">
   .details {
     padding: 20px 40px;
-
-    &__header {
-      text-align: left;
-    }
-
-    &__back {
-      color: #2c3e50;
-      font-size: 20px;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: flex-start;
-
-      span {
-        margin-right: 10px;;
-      }
-    }
 
     &__title {
       text-align: left;
