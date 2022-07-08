@@ -117,8 +117,11 @@ export default class NewReleases extends Vue {
 
     try {
       const { data } = await axios.get(url);
-      // eslint-disable-next-line
-      this.newMovies = data.results.map((result: any) => mapKeys(result, (value: any, key: string) => camelCase(key)));
+      this.newMovies = data.results.map(
+        (result: Record<string, unknown>) => mapKeys(
+          result, (value, key: string) => camelCase(key),
+        ),
+      );
     } catch (error) {
       // eslint-disable-next-line
       console.error(error);
@@ -159,6 +162,7 @@ export default class NewReleases extends Vue {
       display: flex;
       align-items: center;
       margin: 0;
+      user-select: none;
 
       .today {
         font-size: 30px;
@@ -168,8 +172,6 @@ export default class NewReleases extends Vue {
 
     &__container {
       position: relative;
-      // padding-right: 68px;
-      // padding-left: 68px;
     }
 
     &__grid {

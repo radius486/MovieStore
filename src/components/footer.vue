@@ -25,5 +25,6 @@ export default class Footer extends Vue {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  user-select: none;
 }
 </style>

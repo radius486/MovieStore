@@ -25,7 +25,12 @@
       </button>
     </div>
     <h3 class="movie-card__title">
-      {{ movie.title }}
+      <router-link
+        class="movie-card__link"
+        :to="{ name: 'Details', params: { movieId: movie.id } }"
+      >
+        {{ movie.title }}
+      </router-link>
     </h3>
   </div>
 </template>
@@ -155,6 +160,12 @@ export default class MovieCard extends Vue {
       color: #000;
       font-size: 16px;
       margin: 0;
+    }
+
+    &__link {
+      color: #000;
+      text-decoration: none;
+      display: block;
       padding: 0 10px;
       height: 68px;
       display: flex;

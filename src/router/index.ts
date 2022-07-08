@@ -8,8 +8,9 @@ const routes: Array<RouteRecordRaw> = [
     component: Homepage,
   },
   {
-    path: '/details',
+    path: '/details/:movieId',
     name: 'Details',
+    props: (route: any) => ({ movieId: Number.parseInt(route.params.movieId, 10) }),
     component: () => import(/* webpackChunkName: "details" */ '../views/details.vue'),
   },
 ];

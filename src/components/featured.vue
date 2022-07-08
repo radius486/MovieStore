@@ -44,7 +44,7 @@ import { BASE_PATH, API_KEY } from '@/constants';
     MovieCard,
   },
 })
-export default class Topbar extends Vue {
+export default class Featured extends Vue {
   SortDir = setup(() => SortDir)
 
   title = 'Featured Movies';
@@ -82,8 +82,11 @@ export default class Topbar extends Vue {
 
     try {
       const { data } = await axios.get(url);
-      // eslint-disable-next-line
-      this.featuredMovies = data.results.map((result: any) => mapKeys(result, (value: any, key: string) => camelCase(key)));
+      this.featuredMovies = data.results.map(
+        (result: Record<string, unknown>) => mapKeys(
+          result, (value, key: string) => camelCase(key),
+        ),
+      );
     } catch (error) {
       // eslint-disable-next-line
       console.error(error);
@@ -115,6 +118,7 @@ export default class Topbar extends Vue {
       display: flex;
       align-items: center;
       margin: 0;
+      user-select: none;
 
       .stars {
         font-size: 30px;
@@ -152,6 +156,7 @@ export default class Topbar extends Vue {
       display: flex;
       align-items: center;
       justify-content: center;
+      user-select: none;
 
       &.active {
         background: #f60;
