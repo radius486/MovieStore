@@ -18,11 +18,17 @@
     <img class="movie-card__image" :src="imageUrl" :alt="movie.originalTitle">
     <div class="movie-card__info">
       <span class="movie-card__date">{{ movie.releaseDate }}</span>
-      <button class="movie-card__add-to-cart">
-        <span class="material-icons">
-          add_shopping_cart
-        </span>
-      </button>
+      <div>
+        <button class="movie-card__add-to-cart" @click="addToCart(movie)">
+          <span class="movie-card__price">{{ price }}</span>
+          <span class="material-icons" v-if="!inShoppingCart">
+            add_shopping_cart
+          </span>
+          <span class="material-icons" v-if="inShoppingCart">
+            remove_shopping_cart
+          </span>
+        </button>
+      </div>
     </div>
     <h3 class="movie-card__title">
       <router-link
@@ -36,9 +42,11 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { Options, Vue, setup } from 'vue-class-component';
+import { useStore } from 'vuex';
 import { Movie } from '@/types';
 import { IMAGES_PATH } from '@/constants';
+import formatter from '@/formatters/currency';
 
 @Options({
   name: 'MovieCard',
@@ -49,12 +57,36 @@ import { IMAGES_PATH } from '@/constants';
 export default class MovieCard extends Vue {
   movie!: Movie;
 
+  store = setup(() => useStore())
+
   get imageUrl(): string {
     return `${IMAGES_PATH}/${this.movie.backdropPath}`;
   }
 
   get raitingClass(): string {
     return this.movie.voteAverage >= 7 ? 'high' : '';
+  }
+
+  get price(): string {
+    return formatter.format(this.movie.voteAverage);
+  }
+
+  get shoppingCart(): Partial<Movie>[] {
+    return this.store.getters.getShoppingCart;
+  }
+
+  get inShoppingCart(): boolean {
+    return !!this.shoppingCart.find((item) => item.id === this.movie.id);
+  }
+
+  addToCart({ id, title, voteAverage }: Partial<Movie>): void {
+    const movie = {
+      id,
+      title,
+      voteAverage,
+    };
+
+    this.store.dispatch('addToCart', movie);
   }
 }
 </script>
@@ -176,6 +208,10 @@ export default class MovieCard extends Vue {
       &:hover {
         text-decoration: underline;
       }
+    }
+
+    &__price {
+      margin-right: 5px;
     }
 
     &__add-to-cart {

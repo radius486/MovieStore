@@ -46,4 +46,5 @@ export interface MovieDetaild {
   video: false;
   voteAverage: number;
   voteCount: number;
+  fomattedPrice?: string;
 }

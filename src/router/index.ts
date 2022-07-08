@@ -10,6 +10,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/details/:movieId',
     name: 'Details',
+    // eslint-disable-next-line
     props: (route: any) => ({ movieId: Number.parseInt(route.params.movieId, 10) }),
     component: () => import(/* webpackChunkName: "details" */ '../views/details.vue'),
   },

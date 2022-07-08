@@ -27,15 +27,35 @@
     <p class="details__info-line"><span>Tagline:</span> {{ movie.tagline }}</p>
     <p class="details__info-line"><span>Vote Average:</span> {{ movie.voteAverage }}</p>
     <p class="details__info-line"><span>Vote Count:</span> {{ movie.voteCount }}</p>
+    <p class="details__info-line">
+      <span>Price:</span>
+      <span class="details__price">
+        {{ price }}
+      </span>
+    </p>
+    <button class="details__add-to-cart" v-if="inShoppingCart" @click="addToCart(movie)">
+      Remove From Cart
+      <span class="material-icons">
+        remove_shopping_cart
+      </span>
+    </button>
+    <button class="details__add-to-cart" v-if="!inShoppingCart" @click="addToCart(movie)">
+      Add To Cart
+      <span class="material-icons">
+        add_shopping_cart
+      </span>
+    </button>
   </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { Options, Vue, setup } from 'vue-class-component';
+import { useStore } from 'vuex';
 import { mapKeys, camelCase } from 'lodash';
 import axios from 'axios';
-import { MovieDetaild } from '@/types';
+import { MovieDetaild, Movie } from '@/types';
 import { BASE_PATH, IMAGES_PATH, API_KEY } from '@/constants';
+import formatter from '@/formatters/currency';
 
 @Options({
   name: 'Details',
@@ -46,12 +66,26 @@ import { BASE_PATH, IMAGES_PATH, API_KEY } from '@/constants';
 export default class Details extends Vue {
   movieId!: number;
 
+  store = setup(() => useStore())
+
   get title(): string {
     return this.movie.title;
   }
 
   get imageUrl(): string {
     return this.movie.posterPath ? `${IMAGES_PATH}/${this.movie.posterPath}` : '';
+  }
+
+  get price(): string {
+    return formatter.format(this.movie.voteAverage);
+  }
+
+  get shoppingCart(): Partial<Movie>[] {
+    return this.store.getters.getShoppingCart;
+  }
+
+  get inShoppingCart(): boolean {
+    return !!this.shoppingCart.find((item) => item.id === this.movie.id);
   }
 
   movie = {} as MovieDetaild;
@@ -77,6 +111,16 @@ export default class Details extends Vue {
       // eslint-disable-next-line
       console.error(error);
     }
+  }
+
+  addToCart({ id, title, voteAverage }: Partial<Movie>): void {
+    const movie = {
+      id,
+      title,
+      voteAverage,
+    };
+
+    this.store.dispatch('addToCart', movie);
   }
 
   created(): void {
@@ -140,6 +184,38 @@ export default class Details extends Vue {
 
       span {
         font-weight: bold;
+      }
+    }
+
+    &__price {
+      font-weight: bold;
+      color: #3bb33b;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    &__add-to-cart {
+      color: #3bb33b;
+      margin: 20px 0 0;
+      padding: 0 2px;
+      box-shadow: none;
+      border: 0;
+      cursor: pointer;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: none;
+      border: 2px solid #3bb33b;
+      font-weight: bold;
+      font-size: 20px;
+      height: 40px;
+      padding: 0 20px;
+
+      span {
+        font-size: 30px;
+        margin-left: 10px;
       }
     }
   }
