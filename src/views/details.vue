@@ -93,16 +93,6 @@ export default class Details extends Vue {
 
   movie = {} as MovieDetaild;
 
-  snakeToCamel(str: string): string {
-    // eslint-disable-next-line
-    console.log(this.title);
-    return str.toLowerCase()
-      .replace(/([-_][a-z])/g, (group) => group
-        .toUpperCase()
-        .replace('-', '')
-        .replace('_', ''));
-  }
-
   async fetchDetails(): Promise<void> {
     const url = `${BASE_PATH}/${this.movieId}?api_key=${API_KEY}&language=en-US`;
 

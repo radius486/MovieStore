@@ -38,11 +38,9 @@
 
 <script lang="ts">
 import { Options, Vue, setup } from 'vue-class-component';
-import axios from 'axios';
-import { mapKeys, camelCase } from 'lodash';
+import { useMoviesStore } from '@/stores/movies';
 import { Movie, SortDir } from '@/types';
 import MovieCard from '@/components/movie-card.vue';
-import { BASE_PATH, API_KEY } from '@/constants';
 
 @Options({
   name: 'NewReleases',
@@ -51,6 +49,8 @@ import { BASE_PATH, API_KEY } from '@/constants';
   },
 })
 export default class NewReleases extends Vue {
+  movies = setup(() => useMoviesStore())
+
   SortDir = setup(() => SortDir)
 
   title = 'New Releases';
@@ -102,34 +102,14 @@ export default class NewReleases extends Vue {
     this.windowWidth = window.innerWidth;
   }
 
-  snakeToCamel(str: string): string {
-    // eslint-disable-next-line
-    console.log(this.title);
-    return str.toLowerCase()
-      .replace(/([-_][a-z])/g, (group) => group
-        .toUpperCase()
-        .replace('-', '')
-        .replace('_', ''));
-  }
-
-  async fetchNewReleases(): Promise<void> {
-    const url = `${BASE_PATH}/popular?api_key=${API_KEY}&language=en-US&page=1`;
-
-    try {
-      const { data } = await axios.get(url);
-      this.newMovies = data.results.map(
-        (result: Record<string, unknown>) => mapKeys(
-          result, (value, key: string) => camelCase(key),
-        ),
-      );
-    } catch (error) {
-      // eslint-disable-next-line
-      console.error(error);
-    }
+  async init(): Promise<void> {
+    await this.movies.fetchNewMovies();
+    const newMovies = this.movies.getNewMovies;
+    Object.assign(this, { newMovies });
   }
 
   created(): void {
-    this.fetchNewReleases();
+    this.init();
   }
 
   mounted(): void {
@@ -139,6 +119,7 @@ export default class NewReleases extends Vue {
 
   beforeUnmount(): void {
     window.removeEventListener('resize', this.onResize);
+    this.movies.resetNewReleases();
   }
 }
 </script>

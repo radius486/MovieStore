@@ -32,11 +32,10 @@
 
 <script lang="ts">
 import { Options, Vue, setup } from 'vue-class-component';
-import axios from 'axios';
-import { mapKeys, camelCase, orderBy } from 'lodash';
+import { orderBy } from 'lodash';
+import { useMoviesStore } from '@/stores/movies';
 import { Movie, SortDir } from '@/types';
 import MovieCard from '@/components/movie-card.vue';
-import { BASE_PATH, API_KEY } from '@/constants';
 
 @Options({
   name: 'Featured',
@@ -46,6 +45,8 @@ import { BASE_PATH, API_KEY } from '@/constants';
 })
 export default class Featured extends Vue {
   SortDir = setup(() => SortDir)
+
+  movies = setup(() => useMoviesStore())
 
   title = 'Featured Movies';
 
@@ -67,34 +68,18 @@ export default class Featured extends Vue {
     this.sortDir = this.sortBy !== null ? sortDir : SortDir.ASC;
   }
 
-  snakeToCamel(str: string): string {
-    // eslint-disable-next-line
-    console.log(this.title);
-    return str.toLowerCase()
-      .replace(/([-_][a-z])/g, (group) => group
-        .toUpperCase()
-        .replace('-', '')
-        .replace('_', ''));
-  }
-
-  async fetchFeatured(): Promise<void> {
-    const url = `${BASE_PATH}/top_rated?api_key=${API_KEY}&language=en-US&page=1`;
-
-    try {
-      const { data } = await axios.get(url);
-      this.featuredMovies = data.results.map(
-        (result: Record<string, unknown>) => mapKeys(
-          result, (value, key: string) => camelCase(key),
-        ),
-      );
-    } catch (error) {
-      // eslint-disable-next-line
-      console.error(error);
-    }
+  async init(): Promise<void> {
+    await this.movies.fetchFeatured();
+    const featuredMovies = this.movies.getFeaturedMovies;
+    Object.assign(this, { featuredMovies });
   }
 
   created(): void {
-    this.fetchFeatured();
+    this.init();
+  }
+
+  beforeUnmount(): void {
+    this.movies.resetFeatured();
   }
 }
 </script>
