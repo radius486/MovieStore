@@ -20,7 +20,8 @@
 
 <script lang="ts">
 import { Options, Vue, setup } from 'vue-class-component';
-import { useStore } from 'vuex';
+import { useCartStore } from '@/stores/cart';
+// import { useStore } from 'vuex';
 import { Movie } from '@/types';
 import formatter from '@/formatters/currency';
 
@@ -28,12 +29,14 @@ import formatter from '@/formatters/currency';
   name: 'Topbar',
 })
 export default class Topbar extends Vue {
-  store = setup(() => useStore());
+  // store = setup(() => useStore());
+
+  cart = setup(() => useCartStore())
 
   formatter = setup(() => formatter);
 
   get shoppingCart(): Partial<Movie>[] {
-    return this.store.getters.getShoppingCart;
+    return this.cart.getShoppingCart;
   }
 
   get shoppingCartFormatted(): Partial<Movie>[] {

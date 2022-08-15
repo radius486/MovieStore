@@ -42,8 +42,9 @@
 </template>
 
 <script lang="ts">
+import { useCartStore } from '@/stores/cart';
 import { Options, Vue, setup } from 'vue-class-component';
-import { useStore } from 'vuex';
+// import { useStore } from 'vuex';
 import { Movie } from '@/types';
 import { IMAGES_PATH } from '@/constants';
 import formatter from '@/formatters/currency';
@@ -57,10 +58,12 @@ import formatter from '@/formatters/currency';
 export default class MovieCard extends Vue {
   movie!: Movie;
 
-  store = setup(() => useStore())
+  // store = setup(() => useStore())
+
+  cart = setup(() => useCartStore())
 
   get imageUrl(): string {
-    return `${IMAGES_PATH}/${this.movie.backdropPath}`;
+    return `${IMAGES_PATH}${this.movie.backdropPath}`;
   }
 
   get raitingClass(): string {
@@ -72,7 +75,7 @@ export default class MovieCard extends Vue {
   }
 
   get shoppingCart(): Partial<Movie>[] {
-    return this.store.getters.getShoppingCart;
+    return this.cart.getShoppingCart;
   }
 
   get inShoppingCart(): boolean {
@@ -86,7 +89,7 @@ export default class MovieCard extends Vue {
       voteAverage,
     };
 
-    this.store.dispatch('addToCart', movie);
+    this.cart.addToCart(movie);
   }
 }
 </script>

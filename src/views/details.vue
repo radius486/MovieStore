@@ -50,7 +50,8 @@
 
 <script lang="ts">
 import { Options, Vue, setup } from 'vue-class-component';
-import { useStore } from 'vuex';
+// import { useStore } from 'vuex';
+import { useCartStore } from '@/stores/cart';
 import { mapKeys, camelCase } from 'lodash';
 import axios from 'axios';
 import { MovieDetaild, Movie } from '@/types';
@@ -66,7 +67,9 @@ import formatter from '@/formatters/currency';
 export default class Details extends Vue {
   movieId!: number;
 
-  store = setup(() => useStore())
+  // store = setup(() => useStore());
+
+  cart = setup(() => useCartStore())
 
   get title(): string {
     return this.movie.title;
@@ -81,7 +84,7 @@ export default class Details extends Vue {
   }
 
   get shoppingCart(): Partial<Movie>[] {
-    return this.store.getters.getShoppingCart;
+    return this.cart.getShoppingCart;
   }
 
   get inShoppingCart(): boolean {
@@ -120,7 +123,7 @@ export default class Details extends Vue {
       voteAverage,
     };
 
-    this.store.dispatch('addToCart', movie);
+    this.cart.addToCart(movie);
   }
 
   created(): void {
